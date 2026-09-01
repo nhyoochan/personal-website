@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+  <title>Support | nhyoochan</title>
+  <style>
+    :root {
+      --bg: #0a0a08;
+      --bg-soft: #141310;
+      --card: rgba(255,255,255,0.03);
+      --border: rgba(201,168,76,0.18);
+      --gold: #c9a84c;
+      --gold-soft: #e8c97a;
+      --text: #f5f0e8;
+      --muted: rgba(245,240,232,0.72);
+      --shadow: rgba(0,0,0,0.28);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 10px;
+      min-height: 100vh;
+      font-family: "Nunito", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, rgba(201,168,76,0.12), transparent 32%), var(--bg);
+      color: var(--text);
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    a { color: inherit; }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.9rem;
+      padding: clamp(1rem, 3vw, 1.5rem) clamp(1.2rem, 5vw, 3rem);
+      transition: background 0.4s ease, backdrop-filter 0.4s ease;
+    }
+    header.scrolled {
+      background: rgba(10,10,8,0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      flex: 1;
+      position: relative;
+      z-index: 10;
+    }
+    .header-brand {
+      font-family: monospace;
+      font-size: clamp(0.65rem, 1.8vw, 0.8rem);
+      text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+      opacity: 0; animation: fadeSlideDown 0.8s ease 0.3s forwards;
+      position: relative; z-index: 10;
+      text-align: center;
+      margin: 0 auto;
+    }
+    .header-instagram,
+    .header-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #feda75 0%, #fa7e1e 20%, #d62976 45%, #962fbf 70%, #4f5bd5 100%);
+      padding: 4px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+      opacity: 0; animation: fadeSlideDown 0.8s ease 0.6s forwards;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .header-instagram:hover,
+    .header-home:hover {
+      transform: translateY(-1px);
+    }
+    .header-instagram svg,
+    .header-home svg {
+      width: 100%;
+      height: 100%;
+      fill: #ffffff;
+      display: block;
+    }
+
+    .menu-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 42px;
+      height: 42px;
+      background: rgba(201, 168, 76, 0.08);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+    }
+
+    .menu-btn span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--gold);
+      transition: transform 0.35s ease, opacity 0.25s ease;
+      transform-origin: center;
+    }
+
+    .menu-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-drawer {
+      position: fixed;
+      left: 12px;
+      top: 70px;
+      width: min(320px, calc(100vw - 24px));
+      background: rgba(16, 14, 11, 0.96);
+      border: 1px solid rgba(201,168,76,0.18);
+      border-radius: 18px;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.38);
+      backdrop-filter: blur(18px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-12px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 20;
+    }
+
+    .mobile-drawer.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .drawer-inner {
+      padding: 1.2rem 1.1rem 0.8rem;
+    }
+
+    .drawer-label {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(201,168,76,0.18);
+    }
+
+    .drawer-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.9rem 0.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .drawer-icon {
+      width: 20px;
+      height: 20px;
+      fill: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .drawer-platform {
+      display: block;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.2rem;
+    }
+
+    .drawer-handle {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .page {
+      width: min(960px, calc(100% - 20px));
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 80px 0 60px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 14px 30px var(--shadow);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 0.7rem;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      line-height: 1.08;
+      margin: 0 0 22px;
+      letter-spacing: -0.04em;
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1.02rem;
+    }
+
+    .cta {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 14px 20px;
+      border-radius: 999px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.28);
+      color: var(--gold-soft);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      border-color: rgba(201,168,76,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true" role="dialog" aria-label="Main menu">
+    <div class="drawer-inner">
+      <p class="drawer-label">Menu</p>
+
+      <a href="../socials/index.html" class="drawer-link">
+        <svg class="drawer-icon" viewBox="0 0 24 24"><path d="M16 8a4 4 0 110 8 4 4 0 010-8zm-8 0a4 4 0 110 8 4 4 0 010-8zm0 2a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4zM12 2a7 7 0 016.92 5h1.08A2.5 2.5 0 0122 9.5V10a2 2 0 01-2 2h-1.15A7.01 7.01 0 0113 17.15V19h1a1 1 0 110 2H10a1 1 0 110-2h1v-1.85A7.01 7.01 0 015.15 12H4a2 2 0 01-2-2v-.5A2.5 2.5 0 014.5 7h1.08A7 7 0 0112 2zm0 2a5 5 0 00-4.94 4h9.88A5 5 0 0012 4z"/></svg>
+        <div><span class="drawer-platform">Social</span><span class="drawer-handle">Profiles</span></div>
+      </a>
+
+      <a href="../portfolio/index.html" class="drawer-link">
+        <svg class="drawer-icon" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11A2.5 2.5 0 0117.5 20h-11A2.5 2.5 0 014 17.5v-11zm2.5-.5a.5.5 0 00-.5.5v11c0 .28.22.5.5.5h11a.5.5 0 00.5-.5v-11a.5.5 0 00-.5-.5h-11zm1.5 2h8v2h-8V8zm0 4h8v2h-8v-2zm0 4h5v2h-5v-2z"/></svg>
+        <div><span class="drawer-platform">Portfolio</span><span class="drawer-handle">My work</span></div>
+      </a>
+
+      <a href="../charity/index.html" class="drawer-link">
+        <svg class="drawer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div><span class="drawer-platform">Support</span><span class="drawer-handle">PMDRF</span></div>
+      </a>
+    </div>
+  </div>
+
+  <header id="header">
+    <div class="header-left">
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="header-right">
+      <a href="../index.html" class="header-brand">न्ह्युचन राजकर्णिकार</a>
+      <a href="../index.html" class="header-home" aria-label="Go home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l8.5 7.1v9.5h-5.6v-6.2H9.1v6.2H3.5v-9.5L12 3.2zm0 2.5L5.8 9.5v7.9h3.1v-6.2h6.2v6.2h3.1V9.5L12 5.7z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/nhyoochan/" class="header-instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5A5.5 5.5 0 1116.5 13 5.5 5.5 0 0112 7.5zm0 2A3.5 3.5 0 1015.5 13 3.5 3.5 0 0012 9.5zm5.75-3.12a1.38 1.38 0 110 2.75 1.38 1.38 0 010-2.75z"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <div class="page">
+    <section class="card">
+      <div class="eyebrow">Support</div>
+      <h1>Prime Minister's Disaster Relief Fund.</h1>
+      <p>Support recovery work and relief efforts through the official PMDRF portal. Donations help fund emergency response, medical support, shelter, food security, and rehabilitation for families affected by disasters. When communities are hit by crisis, timely support can reduce hardship and help people recover with dignity.</p>
+      <p style="margin-top: 18px;">Every contribution strengthens preparedness, helps rebuild homes and livelihoods, and gives relief teams the resources they need to act quickly. Your support can make a meaningful difference for people facing unexpected loss and disruption.</p>
+      <a href="https://pmdrf.nchl.com.np/" target="_blank" rel="noopener noreferrer" class="cta">Donate via PMDRF</a>
+    </section>
+  </div>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const drawer = document.getElementById('mobileDrawer');
+    let open = false;
+
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    function toggleDrawer() {
+      open = !open;
+      menuBtn.classList.toggle('open', open);
+      drawer.classList.toggle('open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      drawer.setAttribute('aria-hidden', String(!open));
+      document.body.classList.toggle('drawer-open', open);
+    }
+
+    menuBtn.addEventListener('click', toggleDrawer);
+    drawer.querySelectorAll('.drawer-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (open) toggleDrawer();
+      });
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && open) toggleDrawer();
+    });
+  </script>
+</body>
+</html>
