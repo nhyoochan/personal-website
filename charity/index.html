@@ -20,9 +20,14 @@
       --shadow: rgba(0,0,0,0.28);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    *::-webkit-scrollbar { display: none; }
     body {
-      margin: 10px;
+      margin: 0;
       min-height: 100vh;
       font-family: "Nunito", "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, rgba(201,168,76,0.12), transparent 32%), var(--bg);
@@ -98,6 +103,31 @@
       height: 100%;
       fill: #ffffff;
       display: block;
+    }
+
+    .header-pmdrf {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 52px;
+      height: 26px;
+      padding: 4px 8px;
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 8px;
+      background: rgba(201,168,76,0.12);
+      color: var(--gold-soft);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      opacity: 0;
+      animation: fadeSlideDown 0.8s ease 0.6s forwards;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .header-pmdrf:hover {
+      transform: translateY(-1px);
+      border-color: rgba(201,168,76,0.7);
     }
 
     .menu-btn {
@@ -202,18 +232,18 @@
     }
 
     .page {
-      width: min(960px, calc(100% - 20px));
+      width: min(960px, 100%);
       margin: 0 auto;
       min-height: 100vh;
       padding: 80px 0 60px;
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
       padding: 28px;
-      box-shadow: 0 14px 30px var(--shadow);
+      box-shadow: none;
     }
 
     .eyebrow {
@@ -241,9 +271,10 @@
     }
 
     .cta {
-      display: inline-block;
+      display: block;
+      width: min(100%, 360px);
       margin-top: 22px;
-      padding: 14px 20px;
+      padding: 16px 32px;
       border-radius: 999px;
       background: rgba(201,168,76,0.12);
       border: 1px solid rgba(201,168,76,0.28);
@@ -253,12 +284,79 @@
       text-transform: uppercase;
       font-size: 0.72rem;
       font-family: "SFMono-Regular", Consolas, monospace;
+      text-align: center;
       transition: transform 0.25s ease, border-color 0.25s ease;
     }
 
     .cta:hover {
       transform: translateY(-2px);
       border-color: rgba(201,168,76,0.5);
+    }
+
+    @keyframes fadeSlideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .payment-section {
+      margin-top: 56px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(201,168,76,0.18);
+    }
+
+    .payment-title {
+      margin: 0 0 10px;
+      color: var(--gold-soft);
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .payment-note {
+      max-width: 680px;
+      font-size: 0.96rem;
+    }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 26px;
+    }
+
+    .payment-option {
+      padding: 18px;
+      border: 1px solid rgba(201,168,76,0.18);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .payment-bank {
+      margin: 0 0 14px;
+      color: var(--text);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .payment-qr {
+      display: block;
+      width: min(100%, 280px);
+      margin: 0 auto;
+      background: #fff;
+    }
+
+    @media (max-width: 640px) {
+      .card { padding: 20px; }
+
+      .payment-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -267,17 +365,17 @@
     <div class="drawer-inner">
       <p class="drawer-label">Menu</p>
 
-      <a href="../socials/index.html" class="drawer-link">
+      <a href="../socials" class="drawer-link">
         <svg class="drawer-icon" viewBox="0 0 24 24"><path d="M16 8a4 4 0 110 8 4 4 0 010-8zm-8 0a4 4 0 110 8 4 4 0 010-8zm0 2a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4zM12 2a7 7 0 016.92 5h1.08A2.5 2.5 0 0122 9.5V10a2 2 0 01-2 2h-1.15A7.01 7.01 0 0113 17.15V19h1a1 1 0 110 2H10a1 1 0 110-2h1v-1.85A7.01 7.01 0 015.15 12H4a2 2 0 01-2-2v-.5A2.5 2.5 0 014.5 7h1.08A7 7 0 0112 2zm0 2a5 5 0 00-4.94 4h9.88A5 5 0 0012 4z"/></svg>
         <div><span class="drawer-platform">Social</span><span class="drawer-handle">Profiles</span></div>
       </a>
 
-      <a href="../portfolio/index.html" class="drawer-link">
+      <a href="../portfolio" class="drawer-link">
         <svg class="drawer-icon" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11A2.5 2.5 0 0117.5 20h-11A2.5 2.5 0 014 17.5v-11zm2.5-.5a.5.5 0 00-.5.5v11c0 .28.22.5.5.5h11a.5.5 0 00.5-.5v-11a.5.5 0 00-.5-.5h-11zm1.5 2h8v2h-8V8zm0 4h8v2h-8v-2zm0 4h5v2h-5v-2z"/></svg>
         <div><span class="drawer-platform">Portfolio</span><span class="drawer-handle">My work</span></div>
       </a>
 
-      <a href="../charity/index.html" class="drawer-link">
+      <a href="../charity" class="drawer-link">
         <svg class="drawer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         <div><span class="drawer-platform">Support</span><span class="drawer-handle">PMDRF</span></div>
       </a>
@@ -292,13 +390,14 @@
     </div>
 
     <div class="header-right">
-      <a href="../index.html" class="header-brand">न्ह्युचन राजकर्णिकार</a>
-      <a href="../index.html" class="header-home" aria-label="Go home">
+      <a href="../" class="header-brand">न्ह्युचन राजकर्णिकार</a>
+      <a href="../" class="header-home" aria-label="Go home">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l8.5 7.1v9.5h-5.6v-6.2H9.1v6.2H3.5v-9.5L12 3.2zm0 2.5L5.8 9.5v7.9h3.1v-6.2h6.2v6.2h3.1V9.5L12 5.7z"/></svg>
       </a>
       <a href="https://www.instagram.com/nhyoochan/" class="header-instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5A5.5 5.5 0 1116.5 13 5.5 5.5 0 0112 7.5zm0 2A3.5 3.5 0 1015.5 13 3.5 3.5 0 0012 9.5zm5.75-3.12a1.38 1.38 0 110 2.75 1.38 1.38 0 010-2.75z"/></svg>
       </a>
+      <a href="https://pmdrf.nchl.com.np/" class="header-pmdrf" target="_blank" rel="noopener noreferrer" aria-label="PMDRF donation portal">PMDRF</a>
     </div>
   </header>
 
@@ -306,9 +405,28 @@
     <section class="card">
       <div class="eyebrow">Support</div>
       <h1>Prime Minister's Disaster Relief Fund.</h1>
-      <p>Support recovery work and relief efforts through the official PMDRF portal. Donations help fund emergency response, medical support, shelter, food security, and rehabilitation for families affected by disasters. When communities are hit by crisis, timely support can reduce hardship and help people recover with dignity.</p>
-      <p style="margin-top: 18px;">Every contribution strengthens preparedness, helps rebuild homes and livelihoods, and gives relief teams the resources they need to act quickly. Your support can make a meaningful difference for people facing unexpected loss and disruption.</p>
+      <p>Devastating flash floods and catastrophic landslides have swept across parts of Nepal, leaving whole communities submerged and families displaced overnight. Torrential monsoon rains forced rivers past their breaking points, washing away homes, infrastructure, and livelihoods in moments. Search and rescue operations are working tirelessly around the clock to reach stranded survivors, but thousands of affected families are now facing an urgent crisis, left without safe shelter, clean drinking water, food, or access to essential medical care.</p>
+      <p style="margin-top: 18px;">In moments of immense tragedy, direct action makes all the difference. You can extend a life-saving hand directly to those in need by donating to the <strong>Prime Minister's Disaster Relief Fund (PMDRF)</strong> through its official portal at the button below. Every contribution, regardless of size, goes directly toward immediate emergency relief, medical supplies, and long-term rehabilitation efforts for flood victims. Please consider donating today to help rebuild lives and bring hope back to the resilient communities of Nepal.</p>
       <a href="https://pmdrf.nchl.com.np/" target="_blank" rel="noopener noreferrer" class="cta">Donate via PMDRF</a>
+
+      <section class="payment-section" aria-labelledby="payment-title">
+        <h2 class="payment-title" id="payment-title">Direct payment</h2>
+        <p class="payment-note">You can also make a simple direct payment by scanning one of the official bank QR codes below. Select your preferred bank and confirm the recipient details in your banking app before sending.</p>
+        <div class="payment-grid">
+          <div class="payment-option">
+            <h3 class="payment-bank">Laxmi Sunrise Bank</h3>
+            <a href="LAXMI%20SUNRISE.png" target="_blank" rel="noopener noreferrer" aria-label="Open Laxmi Sunrise Bank QR code">
+              <img class="payment-qr" src="LAXMI%20SUNRISE.png" alt="Laxmi Sunrise Bank payment QR code" />
+            </a>
+          </div>
+          <div class="payment-option">
+            <h3 class="payment-bank">HBL</h3>
+            <a href="HBL.png" target="_blank" rel="noopener noreferrer" aria-label="Open HBL payment QR code">
+              <img class="payment-qr" src="HBL.png" alt="HBL payment QR code" />
+            </a>
+          </div>
+        </div>
+      </section>
     </section>
   </div>
 
