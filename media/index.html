@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../icone.png" />
+  <title>Media | न्ह्युचन</title>
+  <style>
+    :root {
+      --bg: #0a0a08;
+      --bg-soft: #141310;
+      --card: rgba(255,255,255,0.03);
+      --border: rgba(201,168,76,0.18);
+      --gold: #c9a84c;
+      --gold-soft: #e8c97a;
+      --text: #f5f0e8;
+      --muted: rgba(245,240,232,0.72);
+      --shadow: rgba(0,0,0,0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    *::-webkit-scrollbar { display: none; }
+    body {
+      margin: 10px;
+      min-height: 100vh;
+      font-family: "Nunito", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, rgba(201,168,76,0.12), transparent 32%), var(--bg);
+      color: var(--text);
+    }
+
+    html, body { min-height: 100%; }
+    a { color: inherit; }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.9rem;
+      padding: clamp(1rem, 3vw, 1.5rem) clamp(1.2rem, 5vw, 3rem);
+      transition: background 0.4s ease, backdrop-filter 0.4s ease;
+    }
+    header.scrolled {
+      background: rgba(10,10,8,0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      flex: 1;
+      position: relative;
+      z-index: 10;
+    }
+    .header-brand {
+      font-family: monospace;
+      font-size: clamp(0.65rem, 1.8vw, 0.8rem);
+      text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+      opacity: 0; animation: fadeSlideDown 0.8s ease 0.3s forwards;
+      position: relative; z-index: 10;
+      text-align: center;
+      margin: 0 auto;
+    }
+    .header-instagram,
+    .header-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #feda75 0%, #fa7e1e 20%, #d62976 45%, #962fbf 70%, #4f5bd5 100%);
+      padding: 4px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+      opacity: 0; animation: fadeSlideDown 0.8s ease 0.6s forwards;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .header-instagram:hover,
+    .header-home:hover {
+      transform: translateY(-1px);
+    }
+    .header-instagram svg,
+    .header-home svg {
+      width: 100%;
+      height: 100%;
+      fill: #ffffff;
+      display: block;
+    }
+
+    .menu-btn {
+      display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+      width: 42px; height: 42px;
+      background: rgba(201, 168, 76, 0.08);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 10px; cursor: pointer; position: relative; z-index: 10;
+    }
+    .menu-btn span {
+      display: block; width: 22px; height: 1.5px; background: var(--gold);
+      transition: transform 0.35s ease, opacity 0.25s ease; transform-origin: center;
+    }
+    .menu-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-drawer {
+      position: fixed; left: 12px; top: 70px; width: min(320px, calc(100vw - 24px));
+      background: rgba(16, 14, 11, 0.96); border: 1px solid rgba(201,168,76,0.18); border-radius: 18px;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.38); backdrop-filter: blur(18px);
+      opacity: 0; pointer-events: none; transform: translateY(-12px);
+      transition: opacity 0.3s ease, transform 0.3s ease; z-index: 20;
+    }
+    .mobile-drawer.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    .drawer-inner { padding: 1.2rem 1.1rem 0.8rem; }
+    .drawer-label {
+      font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.56rem; letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.7; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid rgba(201,168,76,0.18);
+    }
+    .drawer-link {
+      display: flex; align-items: center; gap: 1rem; color: var(--text); text-decoration: none; padding: 0.9rem 0.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .drawer-icon { width: 20px; height: 20px; fill: var(--gold); flex-shrink: 0; }
+    .drawer-platform {
+      display: block; font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.2rem;
+    }
+    .drawer-handle { display: block; font-size: 1.05rem; color: var(--text); }
+
+    .page {
+      width: min(1000px, calc(100% - 20px)); margin: 0 auto; min-height: 100vh; padding: 80px 0 60px;
+    }
+    .hero { padding: 24px 0 12px; }
+    .eyebrow {
+      color: var(--gold); font-size: 0.7rem; letter-spacing: 0.38em; text-transform: uppercase; margin-bottom: 16px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+    h1 {
+      font-size: clamp(2.6rem, 7vw, 4.5rem); line-height: 1.1; margin: 0 0 18px; font-weight: 500; letter-spacing: -0.04em;
+    }
+    .subtitle {
+      color: var(--muted); max-width: 650px; font-size: 1.04rem; line-height: 1.7;
+    }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 2rem;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; box-shadow: 0 14px 30px var(--shadow);
+      min-height: 180px;
+    }
+    .tag {
+      color: var(--gold); font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+    h2 {
+      margin: 0 0 10px; font-size: 1.5rem; font-weight: 500;
+    }
+    p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body><div class="page">
+    <section class="hero">
+      <div class="eyebrow">Media</div>
+      <h1>Photography & video work.</h1>
+      <p class="subtitle">A gallery of visual storytelling, event moments, and creative direction across digital media.</p>
+    </section>
+
+    <div class="grid">
+      <article class="card">
+        <div class="tag">Gallery</div>
+        <h2>Visual stories</h2>
+        <p>Thoughtful imagery shaped by atmosphere, context, and timing.</p>
+      </article>
+      <article class="card">
+        <div class="tag">Motion</div>
+        <h2>Short-form video</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../icone.png" />
+  <title>Media | न्ह्युचन</title>
+  <style>
+    :root {
+      --bg: #0a0a08;
+      --bg-soft: #141310;
+      --card: rgba(255,255,255,0.03);
+      --border: rgba(201,168,76,0.18);
+      --gold: #c9a84c;
+      --gold-soft: #e8c97a;
+      --text: #f5f0e8;
+      --muted: rgba(245,240,232,0.72);
+      --shadow: rgba(0,0,0,0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    *::-webkit-scrollbar { display: none; }
+    body {
+      margin: 10px;
+      min-height: 100vh;
+      font-family: "Nunito", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, rgba(201,168,76,0.12), transparent 32%), var(--bg);
+      color: var(--text);
+    }
+
+    html, body { min-height: 100%; }
+    a { color: inherit; }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.9rem;
+      padding: clamp(1rem, 3vw, 1.5rem) clamp(1.2rem, 5vw, 3rem);
+      transition: background 0.4s ease, backdrop-filter 0.4s ease;
+    }
+    header.scrolled {
+      background: rgba(10,10,8,0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      flex: 1;
+      position: relative;
+      z-index: 10;
+    }
+    .header-brand {
+      font-family: monospace;
+      font-size: clamp(0.65rem, 1.8vw, 0.8rem);
+      text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+      opacity: 0; animation: fadeSlideDown 0.8s ease 0.3s forwards;
+      position: relative; z-index: 10;
+      text-align: center;
+      margin: 0 auto;
+    }
+    .header-instagram,
+    .header-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #feda75 0%, #fa7e1e 20%, #d62976 45%, #962fbf 70%, #4f5bd5 100%);
+      padding: 4px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+      opacity: 0; animation: fadeSlideDown 0.8s ease 0.6s forwards;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .header-instagram:hover,
+    .header-home:hover {
+      transform: translateY(-1px);
+    }
+    .header-instagram svg,
+    .header-home svg {
+      width: 100%;
+      height: 100%;
+      fill: #ffffff;
+      display: block;
+    }
+
+    .menu-btn {
+      display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+      width: 42px; height: 42px;
+      background: rgba(201, 168, 76, 0.08);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 10px; cursor: pointer; position: relative; z-index: 10;
+    }
+    .menu-btn span {
+      display: block; width: 22px; height: 1.5px; background: var(--gold);
+      transition: transform 0.35s ease, opacity 0.25s ease; transform-origin: center;
+    }
+    .menu-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-drawer {
+      position: fixed; left: 12px; top: 70px; width: min(320px, calc(100vw - 24px));
+      background: rgba(16, 14, 11, 0.96); border: 1px solid rgba(201,168,76,0.18); border-radius: 18px;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.38); backdrop-filter: blur(18px);
+      opacity: 0; pointer-events: none; transform: translateY(-12px);
+      transition: opacity 0.3s ease, transform 0.3s ease; z-index: 20;
+    }
+    .mobile-drawer.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    .drawer-inner { padding: 1.2rem 1.1rem 0.8rem; }
+    .drawer-label {
+      font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.56rem; letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.7; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid rgba(201,168,76,0.18);
+    }
+    .drawer-link {
+      display: flex; align-items: center; gap: 1rem; color: var(--text); text-decoration: none; padding: 0.9rem 0.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .drawer-icon { width: 20px; height: 20px; fill: var(--gold); flex-shrink: 0; }
+    .drawer-platform {
+      display: block; font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.2rem;
+    }
+    .drawer-handle { display: block; font-size: 1.05rem; color: var(--text); }
+
+    .page {
+      width: min(1000px, calc(100% - 20px)); margin: 0 auto; min-height: 100vh; padding: 80px 0 60px;
+    }
+    .hero { padding: 24px 0 12px; }
+    .eyebrow {
+      color: var(--gold); font-size: 0.7rem; letter-spacing: 0.38em; text-transform: uppercase; margin-bottom: 16px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+    h1 {
+      font-size: clamp(2.6rem, 7vw, 4.5rem); line-height: 1.1; margin: 0 0 18px; font-weight: 500; letter-spacing: -0.04em;
+    }
+    .subtitle {
+      color: var(--muted); max-width: 650px; font-size: 1.04rem; line-height: 1.7;
+    }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 2rem;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; box-shadow: 0 14px 30px var(--shadow);
+      min-height: 180px;
+    }
+    .tag {
+      color: var(--gold); font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+    h2 {
+      margin: 0 0 10px; font-size: 1.5rem; font-weight: 500;
+    }
+    p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body><div class="page">
+    <section class="hero">
+      <div class="eyebrow">Media</div>
+      <h1>Photography & video work.</h1>
+      <p class="subtitle">A gallery of visual storytelling, event moments, and creative direction across digital media.</p>
+    </section>
+
+    <div class="grid">
+      <article class="card">
+        <div class="tag">Gallery</div>
+        <h2>Visual stories</h2>
+        <p>Thoughtful imagery shaped by atmosphere, context, and timing.</p>
+      </article>
+      <article class="card">
+        <div class="tag">Motion</div>
+        <h2>Short-form video</h2>
+        <p>Elegant movement and narrative framing that feel intentional and human.</p>
+      </article>
+    </div>
+  </div>
+
+  <script src="../navbar.js"></script>
+</body>
+</html>
